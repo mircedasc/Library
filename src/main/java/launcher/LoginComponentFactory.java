@@ -21,21 +21,25 @@ public class LoginComponentFactory {
     private final UserRepository userRepository;
     private final RightsRolesRepository rightsRolesRepository;
     private final BookRepositoryMySQL bookRepository;
-    private static LoginComponentFactory instance;
+    private static volatile LoginComponentFactory instance;
     private static Boolean componentsForTests;
     private static Stage stage;
 
     public static LoginComponentFactory getInstance(Boolean aComponentsForTests, Stage aStage) {
         if (instance == null) {
-            componentsForTests = aComponentsForTests;
-            stage = aStage;
-            instance = new LoginComponentFactory(componentsForTests, stage);
+            synchronized (EmployeeComponentFactory.class) {
+                if (instance == null) {
+                    componentsForTests = aComponentsForTests;
+                    stage = aStage;
+                    instance = new LoginComponentFactory(componentsForTests, stage);
+                }
+            }
         }
 
         return instance;
     }
 
-    public LoginComponentFactory(Boolean componentsForTests, Stage stage){
+    private LoginComponentFactory(Boolean componentsForTests, Stage stage){
         Connection connection = DatabaseConnectionFactory.getConnectionWrapper(componentsForTests).getConnection();
         this.rightsRolesRepository = new RightsRolesRepositoryMySQL(connection);
         this.userRepository = new UserRepositoryMySQL(connection, rightsRolesRepository);
