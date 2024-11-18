@@ -1,7 +1,7 @@
 import model.Book;
 import model.builder.BookBuilder;
-import repository.BookRepository;
-import repository.BookRepositoryMock;
+import repository.book.BookRepository;
+import repository.book.BookRepositoryMock;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
