@@ -7,6 +7,9 @@ public class Book {
     private String author;
     private String title;
     private LocalDate publishedDate;
+    private Long price;
+    private Long quantity;
+
 
     public Long getId() {
         return id;
@@ -40,9 +43,17 @@ public class Book {
         this.publishedDate = publishedDate;
     }
 
+    public Long getPrice() {return price;}
+
+    public void setPrice(Long price) {this.price = price;}
+
+    public Long getQuantity() {return quantity;}
+
+    public void setQuantity(Long quantity) {this.quantity = quantity;}
+
     @Override
     public String toString() {
-        return "Book: ID: " + id + " Title: " + title + " Author: " + author + " Published Date: " + publishedDate;
+        return "Book: ID: " + id + " Title: " + title + " Author: " + author + " Published Date: " + publishedDate + "Price: " + price + "Amount: " + quantity;
 
     }
 }

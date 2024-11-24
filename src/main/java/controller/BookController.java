@@ -18,6 +18,7 @@ public class BookController {
 
         this.bookView.addSaveButtonListener(new SaveButtonListener());
         this.bookView.addDeleteButtonListener(new DeleteButtonListener());
+        this.bookView.addSaleButtonListener(new SaleButtonListener());
     }
 
     private class SaveButtonListener implements EventHandler<ActionEvent>{
@@ -26,11 +27,13 @@ public class BookController {
         public void handle(ActionEvent event) {
             String title = bookView.getTitle();
             String author = bookView.getAuthor();
+            Long price = bookView.getPrice();
+            Long quantity = bookView.getQuantity();
 
             if (title.isEmpty() || author.isEmpty()){
                 bookView.displayAlertMessage("Save Error", "Problem at Title or Author fields", "Can not have empty Title or Author field!");
             } else {
-                BookDTO bookDTO = new BookDTOBuilder().setAuthor(author).setTitle(title).build();
+                BookDTO bookDTO = new BookDTOBuilder().setAuthor(author).setTitle(title).setPrice(price).setQuantity(quantity).build();
                 boolean savedBook = bookService.save(BookMapper.convertBookDTOToBook(bookDTO));
 
                 if (savedBook) {
@@ -60,6 +63,27 @@ public class BookController {
                 bookView.displayAlertMessage("Deletion not successful", "Deletion Process", "You need to select a row from table before pressing the delete button!");
             }
         }
+    }
+
+    private class SaleButtonListener implements EventHandler<ActionEvent>{
+            @Override
+            public void handle(ActionEvent event) {
+                BookDTO bookDTO = (BookDTO) bookView.getBookTableView().getSelectionModel().getSelectedItem();
+                if (bookDTO != null){
+                    boolean saleSuccessfull = bookService.sale(BookMapper.convertBookDTOToBook(bookDTO), 1);
+                    if (saleSuccessfull){
+                        bookView.displayAlertMessage("Sale Successful", "One Book Sold", "Book was successfully sold");
+                        bookView.handleSale(BookMapper.convertBookListToBookDTOList(bookService.findAll()));
+                        if(bookDTO.getQuantity() < 1){
+                            bookView.removeBookFromObservableList(bookDTO);
+                        }
+                    } else {
+                        bookView.displayAlertMessage("Sale not successful", "Sale Process", "There was a problem in the sale process. Please restart the application and try again!");
+                    }
+                } else {
+                    bookView.displayAlertMessage("Sale not successful", "Sale Process", "You need to select a row from table before pressing the sale button!");
+                }
+            }
     }
 
 }

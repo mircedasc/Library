@@ -10,6 +10,7 @@ import repository.user.UserRepository;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Collections;
+import java.util.Optional;
 
 import static database.Constants.Roles.CUSTOMER;
 
@@ -62,9 +63,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private String hashPassword(String password) {
         try {
-            // Sercured Hash Algorithm - 256
-            // 1 byte = 8 biți
-            // 1 byte = 1 char
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
             StringBuilder hexString = new StringBuilder();

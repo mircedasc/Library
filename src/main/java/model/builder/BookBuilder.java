@@ -30,6 +30,17 @@ public class BookBuilder {
         return this;
     }
 
+    public BookBuilder setPrice(Long price){
+        book.setPrice(price);
+        return this;
+    }
+
+    public BookBuilder setQuantity(Long quantity){
+        book.setQuantity(quantity);
+        return this;
+    }
+
+
     public Book build(){
         return book;
     }

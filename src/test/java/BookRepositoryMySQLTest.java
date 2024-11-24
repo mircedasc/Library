@@ -35,6 +35,8 @@ public class BookRepositoryMySQLTest {
                 .setAuthor("Ion Slavici")
                 .setTitle("Moara cu nororc")
                 .setPublishedDate(LocalDate.of(1950, 2, 10))
+                .setPrice(20L)
+                .setQuantity(2L)
                 .build()));
         assertEquals(1, bookRepository.findAll().size());
     }
@@ -46,6 +48,8 @@ public class BookRepositoryMySQLTest {
                 .setAuthor("J.K. Rowling")
                 .setTitle("Harry Potter")
                 .setPublishedDate(LocalDate.of(1883, 1, 15))
+                .setPrice(20L)
+                .setQuantity(2L)
                 .build();
 
         bookRepository.save(book);

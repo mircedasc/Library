@@ -61,12 +61,14 @@ public class BookRepositoryMySQL implements BookRepository {
 
     @Override
     public boolean save(Book book) {
-        String sql = "INSERT INTO book (author, title, publishedDate) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO book (author, title, publishedDate, price, quantity) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, book.getAuthor());
             preparedStatement.setString(2, book.getTitle());
             preparedStatement.setDate(3, java.sql.Date.valueOf(book.getPublishedDate()));
+            preparedStatement.setLong(4, book.getPrice());
+            preparedStatement.setLong(5, book.getQuantity());
 
             preparedStatement.executeUpdate();
 
@@ -94,6 +96,38 @@ public class BookRepositoryMySQL implements BookRepository {
         return true;
     }
 
+    @Override
+    public boolean sale(Book book, int quantity) {
+        String updateSql = "UPDATE book SET quantity = ? WHERE author = ? AND title = ?";
+        String deleteSql = "DELETE FROM book WHERE author = ? AND title = ?";
+        boolean success = false;
+
+        try {
+
+            if (book.getQuantity() - quantity < 1) {
+                try (PreparedStatement deleteStatement = connection.prepareStatement(deleteSql)) {
+                    deleteStatement.setString(1, book.getAuthor());
+                    deleteStatement.setString(2,book.getTitle());
+                    deleteStatement.executeUpdate();
+                    success = true;
+                }
+            } else {
+                try (PreparedStatement updateStatement = connection.prepareStatement(updateSql)) {
+                    updateStatement.setLong(1, book.getQuantity() - quantity);
+                    updateStatement.setString(2, book.getAuthor());
+                    updateStatement.setString(3, book.getTitle());
+                    updateStatement.executeUpdate();
+                    success = true;
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
+
 
     @Override
     public void removeAll() {
@@ -113,6 +147,8 @@ public class BookRepositoryMySQL implements BookRepository {
                 .setTitle(resultSet.getString("title"))
                 .setAuthor(resultSet.getString("author"))
                 .setPublishedDate(new java.sql.Date(resultSet.getDate("publishedDate").getTime()).toLocalDate())
+                .setPrice(resultSet.getLong("price"))
+                .setQuantity(resultSet.getLong("quantity"))
                 .build();
     }
 }

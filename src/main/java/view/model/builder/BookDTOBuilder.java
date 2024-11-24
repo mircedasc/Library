@@ -18,6 +18,16 @@ public class BookDTOBuilder {
         bookDTO.setTitle(title);
         return this;
     }
+
+    public BookDTOBuilder setPrice(Long price) {
+        bookDTO.setPrice(price);
+        return this;
+    }
+
+    public BookDTOBuilder setQuantity(Long quantity) {
+        bookDTO.setQuantity(quantity);
+        return this;
+    }
     public BookDTO build() {
         return bookDTO;
     }

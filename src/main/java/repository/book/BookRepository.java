@@ -13,5 +13,7 @@ public interface BookRepository {
 
     boolean delete(Book book);
 
+    boolean sale(Book book, int quantity);
+
     void removeAll();
 }
