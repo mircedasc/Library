@@ -36,6 +36,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    public boolean sale(Book book, int quantity) {return bookRepository.sale(book, quantity);}
+
+    @Override
     public int getAgeOfBook(Long id) {
         Book book = this.findById(id);
         LocalDate now = LocalDate.now();

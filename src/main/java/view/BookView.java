@@ -22,11 +22,17 @@ public class BookView {
     private final ObservableList<BookDTO> booksObservableList;
     private TextField authorTextField;
     private TextField titleTextField;
+    private TextField priceTextField;
+    private TextField quantityTextField;
 
     private Label authorLabel;
     private Label titleLabel;
+    private Label priceLabel;
+    private Label quantityLabel;
+
     private Button saveButton;
     private Button deleteButton;
+    private Button saleButton;
 
     public BookView(Stage primaryStage, List<BookDTO> books) {
         primaryStage.setTitle("Library");
@@ -56,7 +62,13 @@ public class BookView {
         TableColumn<BookDTO, String> authorColumn = new TableColumn<BookDTO, String>("Author");
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
 
-        bookTableView.getColumns().addAll(titleColumn, authorColumn);
+        TableColumn<BookDTO, String> priceColumn = new TableColumn<BookDTO, String>("Price");
+        priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        TableColumn<BookDTO, String> quantityColumn = new TableColumn<BookDTO, String>("Quantity");
+        quantityColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+
+        bookTableView.getColumns().addAll(titleColumn, authorColumn, priceColumn, quantityColumn);
 
         bookTableView.setItems(booksObservableList);
 
@@ -76,11 +88,26 @@ public class BookView {
         authorTextField = new TextField();
         gridPane.add(authorTextField, 4, 1);
 
+        priceLabel = new Label("Price");
+        gridPane.add(priceLabel, 1, 2);
+
+        priceTextField = new TextField();
+        gridPane.add(priceTextField, 2, 2);
+
+        quantityLabel = new Label("Quantity");
+        gridPane.add(quantityLabel, 3, 2);
+
+        quantityTextField = new TextField();
+        gridPane.add(quantityTextField, 4, 2);
+
         saveButton = new Button("Save");
         gridPane.add(saveButton, 5, 1);
 
         deleteButton = new Button("Delete");
         gridPane.add(deleteButton, 6, 1);
+
+        saleButton = new Button("Sale");
+        gridPane.add(saleButton, 7, 1);
 
     }
 
@@ -97,6 +124,10 @@ public class BookView {
 
     public void addDeleteButtonListener(EventHandler<ActionEvent> deleteButtonListener) {
         deleteButton.setOnAction(deleteButtonListener);
+    }
+
+    public void addSaleButtonListener(EventHandler<ActionEvent> saleButtonListener) {
+        saleButton.setOnAction(saleButtonListener);
     }
 
     public void displayAlertMessage(String title, String header, String content) {
@@ -116,6 +147,9 @@ public class BookView {
         return authorTextField.getText();
     }
 
+    public Long getPrice(){return Long.parseLong(priceTextField.getText());}
+    public Long getQuantity(){return Long.parseLong(quantityTextField.getText());}
+
 
     public ObservableList<BookDTO> getBooksObservableList() {
         return booksObservableList;
@@ -130,6 +164,7 @@ public class BookView {
         this.booksObservableList.remove(bookDTO);
     }
 
+    public void handleSale(List<BookDTO> books) { this.booksObservableList.setAll(FXCollections.observableArrayList(books));}
 
     public TableView getBookTableView() {
         return bookTableView;

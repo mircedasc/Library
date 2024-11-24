@@ -34,6 +34,21 @@ public class BookRepositoryMock implements BookRepository {
     }
 
     @Override
+    public boolean sale(Book book, int quantity) {
+        Optional<Book> existingBook = findById(book.getId());
+        if(existingBook.isPresent()) {
+            if (book.getQuantity() - quantity < 1) {
+                return delete(book);
+            } else {
+                Book bookInList = existingBook.get();
+                bookInList.setQuantity(book.getQuantity() - quantity);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public void removeAll() {
         books.clear();
     }

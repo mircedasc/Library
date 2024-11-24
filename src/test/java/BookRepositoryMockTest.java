@@ -38,6 +38,8 @@ public class BookRepositoryMockTest {
                 .setAuthor("Ion Slavici")
                 .setTitle("Moara cu nororc")
                 .setPublishedDate(LocalDate.of(1950, 2, 10))
+                .setPrice(20L)
+                .setQuantity(2L)
                 .build()));
     }
 }
