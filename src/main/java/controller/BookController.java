@@ -73,7 +73,10 @@ public class BookController {
                     boolean saleSuccessfull = bookService.sale(BookMapper.convertBookDTOToBook(bookDTO), 1);
                     if (saleSuccessfull){
                         bookView.displayAlertMessage("Sale Successful", "One Book Sold", "Book was successfully sold");
-                        bookView.handleSale(BookMapper.convertBookListToBookDTOList(bookService.findAll()));
+                        //bookView.handleSale(BookMapper.convertBookListToBookDTOList(bookService.findAll()));
+                        bookDTO.setQuantity(bookDTO.getQuantity() - 1);
+
+                        bookView.handleSale(bookDTO);
                         if(bookDTO.getQuantity() < 1){
                             bookView.removeBookFromObservableList(bookDTO);
                         }

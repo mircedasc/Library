@@ -10,9 +10,10 @@ import repository.user.UserRepository;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
-import static database.Constants.Roles.CUSTOMER;
+import static database.Constants.Roles.*;
 
 public class AuthenticationServiceImpl implements AuthenticationService {
 
@@ -23,11 +24,14 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.userRepository = userRepository;
         this.rightsRolesRepository = rightsRolesRepository;
     }
-
+    @Override
+    public List<User> findAll (){
+        return userRepository.findAll();
+    }
     @Override
     public Notification<Boolean> register(String username, String password) {
 
-        Role customerRole = rightsRolesRepository.findRoleByTitle(CUSTOMER);
+        Role customerRole = rightsRolesRepository.findRoleByTitle(EMPLOYEE);
 
         User user = new UserBuilder()
                 .setUsername(username)
@@ -56,6 +60,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         return userRepository.findByUsernameAndPassword(username, hashPassword(password));
     }
 
+    @Override
+    public boolean delete(String username){
+        if(username.equals("Mircea@mircea.com")){
+            return false;
+        }
+        return userRepository.delete(username);
+    }
     @Override
     public boolean logout(User user) {
         return false;

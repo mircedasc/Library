@@ -8,7 +8,6 @@ public class BookDTO {
     private LongProperty price;
     private LongProperty quantity;
 
-    // Author property
     public void setAuthor(String author) {
         authorProperty().set(author);
     }
@@ -25,7 +24,6 @@ public class BookDTO {
         return author;
     }
 
-    // Title property
     public void setTitle(String title) {
         titleProperty().set(title);
     }
@@ -42,7 +40,6 @@ public class BookDTO {
         return title;
     }
 
-    // Price property (LongProperty instead of StringProperty)
     public void setPrice(Long price) {
         priceProperty().set(price);
     }
@@ -59,7 +56,6 @@ public class BookDTO {
         return price;
     }
 
-    // Quantity property (LongProperty instead of StringProperty)
     public void setQuantity(Long quantity) {
         quantityProperty().set(quantity);
     }

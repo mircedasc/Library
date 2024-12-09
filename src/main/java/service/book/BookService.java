@@ -16,4 +16,5 @@ public interface BookService {
     boolean sale(Book book, int quantity);
 
     int getAgeOfBook(Long id);
+
 }
