@@ -1,14 +1,9 @@
 package database;
 
-import static database.Constants.Tables.BOOK;
-import static database.Constants.Tables.RIGHT;
-import static database.Constants.Tables.ROLE;
-import static database.Constants.Tables.ROLE_RIGHT;
-import static database.Constants.Tables.USER;
-import static database.Constants.Tables.USER_ROLE;
+import static database.Constants.Tables.*;
 
 public class SQLTableCreationFactory {
-
+//dragomiresti Maramures
     public String getCreateSQLForTable(String table) {
         return switch (table) {
             case BOOK -> "CREATE TABLE IF NOT EXISTS book (" +
@@ -76,6 +71,15 @@ public class SQLTableCreationFactory {
                     "    REFERENCES role (id)" +
                     "    ON DELETE CASCADE" +
                     "    ON UPDATE CASCADE);";
+            case SALE -> "CREATE TABLE IF NOT EXISTS sale (" +
+                    "  id int(11) NOT NULL AUTO_INCREMENT," +
+                    "  author varchar(500) NOT NULL," +
+                    "  title varchar(500) NOT NULL," +
+                    "  sellDate datetime DEFAULT NULL," +
+                    "  employeeName varchar(500) NOT NULL,"+
+                    "  PRIMARY KEY (id)," +
+                    "  UNIQUE KEY id_UNIQUE (id)" +
+                    ") ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;";
             default -> "";
         };
     }

@@ -4,6 +4,7 @@ import model.Book;
 import model.builder.BookBuilder;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -100,6 +101,8 @@ public class BookRepositoryMySQL implements BookRepository {
     public boolean sale(Book book, int quantity) {
         String updateSql = "UPDATE book SET quantity = ? WHERE author = ? AND title = ?";
         String deleteSql = "DELETE FROM book WHERE author = ? AND title = ?";
+        String saveSql = "INSERT INTO sale (author, title, sellDate, employeeName) VALUES (?, ?, ?, ?)";
+
         boolean success = false;
 
         try {
@@ -107,7 +110,7 @@ public class BookRepositoryMySQL implements BookRepository {
             if (book.getQuantity() - quantity < 1) {
                 try (PreparedStatement deleteStatement = connection.prepareStatement(deleteSql)) {
                     deleteStatement.setString(1, book.getAuthor());
-                    deleteStatement.setString(2,book.getTitle());
+                    deleteStatement.setString(2, book.getTitle());
                     deleteStatement.executeUpdate();
                     success = true;
                 }
@@ -118,6 +121,14 @@ public class BookRepositoryMySQL implements BookRepository {
                     updateStatement.setString(3, book.getTitle());
                     updateStatement.executeUpdate();
                     success = true;
+                }
+
+                try(PreparedStatement saveStatement = connection.prepareStatement(saveSql)){
+                    saveStatement.setString(1, book.getAuthor());
+                    saveStatement.setString(2, book.getTitle());
+                    saveStatement.setDate(3, java.sql.Date.valueOf(LocalDate.now()));
+                    saveStatement.setString(4, "unknown@employee.com");
+                    saveStatement.executeUpdate();
                 }
             }
 

@@ -31,6 +31,7 @@ public class BookRepositoryMySQLTest {
 
     @Test
     public void save() {
+        int previousSize = bookRepository.findAll().size();
         assertTrue(bookRepository.save(new BookBuilder()
                 .setAuthor("Ion Slavici")
                 .setTitle("Moara cu nororc")
@@ -38,7 +39,7 @@ public class BookRepositoryMySQLTest {
                 .setPrice(20L)
                 .setQuantity(2L)
                 .build()));
-        assertEquals(1, bookRepository.findAll().size());
+        assertEquals(previousSize+1, bookRepository.findAll().size());
     }
 
     @Test

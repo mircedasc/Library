@@ -1,5 +1,6 @@
 
 package repository.user;
+import model.Book;
 import model.User;
 import model.builder.UserBuilder;
 import model.validator.Notification;
@@ -10,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import static database.Constants.Tables.USER;
@@ -28,7 +30,23 @@ public class UserRepositoryMySQL implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        return null;
+        String sql = "SELECT * FROM user;";
+
+        List<User> users = new ArrayList<>();
+
+        try {
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                users.add(getUserFromResultSet(resultSet));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return users;
     }
 
     @Override
@@ -98,6 +116,19 @@ public class UserRepositoryMySQL implements UserRepository {
     }
 
     @Override
+    public boolean delete(String username){
+        String sql = "DELETE FROM user WHERE username = ?";
+        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setString(1, username);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public boolean existsByUsername(String email) {
         String fetchUserSql = "SELECT 1 FROM `" + USER + "` WHERE `username` = ?";
 
@@ -113,5 +144,13 @@ public class UserRepositoryMySQL implements UserRepository {
         }
     }
 
+    private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
+        return new UserBuilder()
+                .setId(resultSet.getLong("id"))
+                .setPassword(resultSet.getString("password"))
+                .setUsername(resultSet.getString("username"))
+                .setRoles(rightsRolesRepository.findRolesForUser(resultSet.getLong("id")))
+                .build();
 
-}
+        }
+    }

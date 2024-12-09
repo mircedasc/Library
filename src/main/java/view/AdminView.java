@@ -1,6 +1,5 @@
 package view;
 
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -13,13 +12,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import view.model.BookDTO;
+import view.model.UserDTO;
 
-import java.util.*;
+import java.util.List;
 
-
-public class BookView {
+public class AdminView {
     private TableView bookTableView;
+    private TableView userTableView;
     private final ObservableList<BookDTO> booksObservableList;
+    private final ObservableList<UserDTO> usersObservableList;
     private TextField authorTextField;
     private TextField titleTextField;
     private TextField priceTextField;
@@ -33,17 +34,20 @@ public class BookView {
     private Button saveButton;
     private Button deleteButton;
     private Button saleButton;
+    private Button deleteUserButton;
+    private Button reportButton;
 
-    public BookView(Stage primaryStage, List<BookDTO> books) {
-        primaryStage.setTitle("Library");
+    public AdminView(Stage primaryStage, List<BookDTO> books, List<UserDTO> users) {
+        primaryStage.setTitle("Admin View");
 
         GridPane gridPane = new GridPane();
-        initializeGridPane(gridPane);
+        initializeGridPane(gridPane, "CENTER");
 
         Scene scene = new Scene(gridPane, 720, 480);
         primaryStage.setScene(scene);
 
         booksObservableList = FXCollections.observableArrayList(books);
+        usersObservableList = FXCollections.observableArrayList(users);
 
         initTableView(gridPane);
 
@@ -73,6 +77,18 @@ public class BookView {
         bookTableView.setItems(booksObservableList);
 
         gridPane.add(bookTableView, 0, 0, 5, 1);
+
+        userTableView = new TableView<UserDTO>();
+        userTableView.setPlaceholder(new Label("No users to display"));
+
+        TableColumn<UserDTO, String> usernameColumn = new TableColumn<>("Username");
+        usernameColumn.setCellValueFactory(new PropertyValueFactory<>("username"));
+
+        userTableView.getColumns().addAll(usernameColumn);
+
+        userTableView.setItems(usersObservableList);
+
+        gridPane.add(userTableView, 0, 3, 5, 1);
     }
 
     private void initSaveOptions(GridPane gridPane) {
@@ -101,18 +117,24 @@ public class BookView {
         gridPane.add(quantityTextField, 4, 2);
 
         saveButton = new Button("Save");
-        gridPane.add(saveButton, 5, 1);
+        gridPane.add(saveButton, 5, 0);
 
         deleteButton = new Button("Delete");
-        gridPane.add(deleteButton, 6, 1);
+        gridPane.add(deleteButton, 6, 0);
 
         saleButton = new Button("Sale");
-        gridPane.add(saleButton, 7, 1);
+        gridPane.add(saleButton, 7, 0);
+
+        deleteUserButton = new Button("Delete User");
+        gridPane.add(deleteUserButton, 5, 3);
+
+        reportButton = new Button("Create Report");
+        gridPane.add(reportButton, 6, 3);
 
     }
 
-    private void initializeGridPane(GridPane gridPane) {
-        gridPane.setAlignment(Pos.CENTER);
+    private void initializeGridPane(GridPane gridPane, String position) {
+        gridPane.setAlignment(Pos.valueOf(position));
         gridPane.setHgap(10);
         gridPane.setVgap(10);
         gridPane.setPadding(new Insets(25, 25, 25, 25));
@@ -128,6 +150,14 @@ public class BookView {
 
     public void addSaleButtonListener(EventHandler<ActionEvent> saleButtonListener) {
         saleButton.setOnAction(saleButtonListener);
+    }
+
+    public void addDeleteUserButtonListener(EventHandler<ActionEvent> deleteUserButtonListener){
+        deleteUserButton.setOnAction(deleteUserButtonListener);
+    }
+
+    public void addReportButtonListener(EventHandler<ActionEvent> reportButtonListener){
+        reportButton.setOnAction(reportButtonListener);
     }
 
     public void displayAlertMessage(String title, String header, String content) {
@@ -165,13 +195,13 @@ public class BookView {
     }
 
     public void handleSale(BookDTO bookDTO) {
-        //this.booksObservableList.setAll(FXCollections.observableArrayList(books));
         this.booksObservableList.set(booksObservableList.indexOf(bookDTO), bookDTO);
-        }
+    }
+
+    public void removeUserFromObservableList(UserDTO userDTO){this.usersObservableList.remove(userDTO);}
 
     public TableView getBookTableView() {
         return bookTableView;
     }
-
-
+    public TableView getUserTableView(){return userTableView;}
 }
