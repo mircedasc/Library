@@ -36,41 +36,6 @@ Design Patterns: MVC, Singleton, Factory
 
 Principles: SOLID, Clean Code
 
-🔧 Setup & Installation
-
-Clone the repository:
-
-git clone https://github.com/your-repo/library-action-simulator.git
-
-Navigate to the project directory:
-
-cd library-action-simulator
-
-Set up the database and configure .env file with database credentials.
-
-Run the backend server:
-
-mvn spring-boot:run
-
-Start the frontend:
-
-npm install
-npm start
-
-Access the application at http://localhost:3000.
-
-📜 Contribution Guidelines
-
-Fork the repository and create a feature branch.
-
-Follow the coding conventions and commit messages.
-
-Submit a pull request with a detailed description.
-
-📝 License
-
-This project is licensed under the MIT License.
-
 📬 Contact
 
-For inquiries, reach out at your-email@example.com.
+For inquiries, reach out at mircea.dascalu16@gmail.com
